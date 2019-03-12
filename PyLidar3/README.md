@@ -1,7 +1,7 @@
 # PyLidar3
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/lakshmanmallidi/PyLidar3) [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/lakshmanmallidi/PyLidar3/License)
-<br />PyLidar3 is python 3 package to get data from Lidar device. Currently supports ydlidar from [www.ydlidar.com/]([www.ydlidar.com/).
+<br />PyLidar3 is python 3 package to get data from Lidar device. Source code has been updated to support ydlidar G4 from [www.ydlidar.com/]([www.ydlidar.com/).
 
 ## Source code
 Source code is available on github's repository. <br />
