@@ -1,6 +1,7 @@
-# Orignial Author: lakshamllidi
-# Link to git repository: https://github.com/lakshmanmallidi/PyLidar3
-# Edited to support YdLidar G4
+"""
+Author: Lakshman Mallidi
+Link: https://github.com/lakshmanmallidi/PyLidar3
+"""
 
 import serial
 import time
@@ -60,15 +61,15 @@ class YdLidarG4:
     def __calculate(cls,d):
         ddict=[]
         LSN=d[1]
-        Angle_fsa = ((YdLidarX4.__addhex(d[2],d[3])>>1)/64.0)+YdLidarX4.__AngleCorr(YdLidarX4.__addhex(d[8],d[9]))
-        Angle_lsa = ((YdLidarX4.__addhex(d[4],d[5])>>1)/64.0)+YdLidarX4.__AngleCorr(YdLidarX4.__addhex(d[LSN+6],d[LSN+7]))
+        Angle_fsa = ((YdLidarG4.__addhex(d[2],d[3])>>1)/64.0)+YdLidarG4.__AngleCorr(YdLidarG4.__addhex(d[8],d[9]))
+        Angle_lsa = ((YdLidarG4.__addhex(d[4],d[5])>>1)/64.0)+YdLidarG4.__AngleCorr(YdLidarG4.__addhex(d[LSN+6],d[LSN+7]))
         if Angle_fsa<Angle_lsa:
             Angle_diff = Angle_lsa-Angle_fsa
         else:
             Angle_diff = 360+Angle_lsa-Angle_fsa
         for i in range(0,2*LSN,2):
-            dist_i = YdLidarX4.__addhex(d[8+i],d[8+i+1])
-            Angle_i_tmp = ((Angle_diff/float(LSN))*(i/2))+Angle_fsa+YdLidarX4.__AngleCorr(dist_i)
+            dist_i = YdLidarG4.__addhex(d[8+i],d[8+i+1])
+            Angle_i_tmp = ((Angle_diff/float(LSN))*(i/2))+Angle_fsa+YdLidarG4.__AngleCorr(dist_i)
             if Angle_i_tmp > 360:
                 Angle_i = Angle_i_tmp-360
             elif Angle_i_tmp < 0:
@@ -80,11 +81,11 @@ class YdLidarG4:
     @classmethod
     def __checksum(cls,data):
         try:
-            ocs = YdLidarX4.__addhex(data[6],data[7])
+            ocs = YdLidarG4.__addhex(data[6],data[7])
             LSN = data[1]
-            cs = 0x55AA^YdLidarX4.__addhex(data[0],data[1])^YdLidarX4.__addhex(data[2],data[3])^YdLidarX4.__addhex(data[4],data[5])
+            cs = 0x55AA^YdLidarG4.__addhex(data[0],data[1])^YdLidarG4.__addhex(data[2],data[3])^YdLidarG4.__addhex(data[4],data[5])
             for i in range(0,2*LSN,2):
-                cs = cs^YdLidarX4.__addhex(data[8+i],data[8+i+1]) 
+                cs = cs^YdLidarG4.__addhex(data[8+i],data[8+i+1])
             if(cs==ocs):
                 return True
             else:
@@ -111,8 +112,8 @@ class YdLidarG4:
                         countdict.update({i:0})
                     for e in data:
                         if(e[0]==0):
-                            if(YdLidarX4.__checksum(e)):
-                                d = YdLidarX4.__calculate(e)
+                            if(YdLidarG4.__checksum(e)):
+                                d = YdLidarG4.__calculate(e)
                                 for ele in d:
                                     angle = int(round(ele[1]))
                                     prev = distdict[angle]
